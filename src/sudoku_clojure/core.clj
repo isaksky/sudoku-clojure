@@ -71,3 +71,22 @@
 (def puzzle
   (first sudoku-puzzles))
 
+(defn- fill-obvious-pass [puzzle]
+  "Takes a puzzle, returns the puzzle with all the empty slots with only 1 possible value filled."
+  (into [] (for [row (range 0 9)
+                 col (range 0 9)]
+             (let [slot-value (puzzle (puzzle-index col row))]
+               (if (> slot-value 0)
+                 slot-value
+                 (let [possible-slot-values (possible-moves puzzle col row)]
+                   (if (= 1 (count possible-slot-values))
+                     (first possible-slot-values)
+                     0)))))))
+
+(defn fill-obvious [puzzle]
+  "Do this many times, because doing one fill-obvious-pass could change some slots, which changes the possible values for other slots. Some of them could therefore only have 1 left."
+  (loop [current-puzzle puzzle]
+    (let [new-puzzle (fill-obvious-pass current-puzzle)]
+      (if (= current-puzzle new-puzzle)
+        new-puzzle
+        (recur new-puzzle)))))
