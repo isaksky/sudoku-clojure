@@ -52,13 +52,9 @@
           (flatten
            (let [start-col (* 3 subgrid-col)
                  start-row (* 3 subgrid-row)]
-             (for [col (range
-                        start-col
-                        (+ 3 start-col))]
-               (for [row (range
-                          start-row
-                          (+ 3 start-row))]
-                 (puzzle (puzzle-index col row)))))))))
+             (for [row (range start-row (+ 3 start-row))
+                   col (range start-col (+ 3 start-col))]
+               (puzzle (puzzle-index col row))))))))
 
 (defn possible-moves [puzzle col row]
   "Get all the possible sudoku moves for a col and row index on a puzzle. The square cannot have a value already."
