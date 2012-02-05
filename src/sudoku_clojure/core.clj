@@ -1,13 +1,9 @@
 (ns sudoku-clojure.core
-  (:require [clj-http.client :as client])
   (:require [clojure.string :as str])
   (:require [clojure.set :as set]))
 
 (defn working-dir-path [path]
   (str (. System getProperty "user.dir") path ))
-
-(def sudoku-text-file-path
-  (working-dir-path "/resources/sudoku.txt"))
 
 (def sudoku-puzzles
   (let [sudoku-puzzles-file-path (working-dir-path "/resources/sudoku.txt")
