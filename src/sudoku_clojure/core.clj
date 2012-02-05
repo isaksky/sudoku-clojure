@@ -86,3 +86,24 @@
       (if (= current-puzzle new-puzzle)
         new-puzzle
         (recur new-puzzle)))))
+
+(defn shallow-complete-check [puzzle]
+  (not-any? #(= 0 %) puzzle))
+
+(defn deep-complete-check [puzzle]
+  (let [sudoku-values (range 1 10)]
+    (and
+     (every?
+      (fn [col] (= sudoku-values
+                  (sort (puzzle-column puzzle col))))
+      (range 0 9))
+     (every?
+      (fn [row] (= sudoku-values
+                  (sort (puzzle-row puzzle row))))
+      (range 0 9))
+     (every?
+      (fn [subgrid-coords] (= sudoku-values
+                             (sort (puzzle-subgrid puzzle subgrid-coords))))
+      (into [] (for [subgrid-row (range 0 3)
+                     subgrid-col (range 0 3)]
+                 [subgrid-col subgrid-row]))))))

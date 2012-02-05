@@ -45,3 +45,6 @@
 (deftest possible-moves-test
   (is (= (possible-moves test-puzzle 0 0)
          #{4 5})))
+
+(deftest shallow-complete-check-test
+  (is (= false (shallow-complete-check test-puzzle)) "Should be false for puzzles with empty slots."))
