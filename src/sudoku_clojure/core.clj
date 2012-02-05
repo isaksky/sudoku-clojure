@@ -88,9 +88,11 @@
         (recur new-puzzle)))))
 
 (defn shallow-complete-check [puzzle]
+  "Checks if all slots have a value."
   (not-any? #(= 0 %) puzzle))
 
 (defn deep-complete-check [puzzle]
+  "Checks that all columns, rows, and subgrids have the legal sudoku values."
   (let [sudoku-values (range 1 10)]
     (and
      (every?
