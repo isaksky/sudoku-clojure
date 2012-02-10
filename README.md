@@ -11,6 +11,7 @@ Compile it in the REPL and type:
 (solve-print-all)
 ```
 You can also inspect and solve puzzles interactively:
+
 ```clojure
 ;;Print puzzle 1/50 of the Project Euler sudoku puzzles
 (print-puzzle (sudoku-puzzles 0))
