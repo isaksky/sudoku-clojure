@@ -89,24 +89,21 @@
   (cond (= 8 col) [0 (inc row)]
         :else [(inc col) row]))
 
-(defn- fill-obvious-pass [puzzle]
+(defn- fill-obvious-pass
   "Takes a puzzle, returns the puzzle with all the empty slots with only 1 possible value filled."
-  ;; This is very messy compared to an obvious iterative solution
-  ;; (doseq and swap). But any pro functional way to do this?
-  (loop [puzz puzzle [col row] [0 0]]
-    (let [slot-value (puzzle (puzzle-index col row))
-          on-last? (= 8 col row)]
-      (cond (< 0 slot-value)
-            (cond on-last? puzz
-                  :else (recur puzz (next-coords col row)))
-            :else (let [poss-values (possible-values puzz col row)
-                        poss-values-count (count poss-values)]
-                    (case poss-values-count
-                      1 (let [new-puzz (assoc puzz (puzzle-index col row) (first poss-values))]
-                          (cond on-last? new-puzz
-                                :else (recur new-puzz (next-coords col row))))
-                      (if on-last? puzz
-                          (recur puzz (next-coords col row)))))))))
+  [puzzle]
+  (reduce (fn [puzzle [col row]]
+            (let [slot-value (puzzle (puzzle-index col row))]
+              (if (> slot-value 0)
+                puzzle
+                (let [poss-values (possible-values puzzle col row)
+                      poss-values-count (count poss-values)]
+                  (if (= poss-values-count 1)
+                    (assoc puzzle (puzzle-index col row) (first poss-values))
+                    puzzle)))))
+          puzzle
+          all-puzzle-coords))
+
 
 (defn puzzle-filled? [puzzle]
   (not-any? #(= 0 %) puzzle))
