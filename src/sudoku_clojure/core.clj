@@ -59,8 +59,9 @@
              col (range start-col (+ 3 start-col))]
          (puzzle (puzzle-index col row)))))))
 
-(defn possible-values [puzzle col row]
+(defn possible-values
   "Get all the possible sudoku moves for a col and row index on a puzzle."
+  [puzzle col row]
   {:pre (= 0 (puzzle (puzzle-index col row)))}
   (apply set/difference
          (map set [(range 1 10)
@@ -76,8 +77,9 @@
                        (empty? (possible-values puzzle col row))))
    all-puzzle-coords))
 
-(defn- get-slot-value [puzzle col row]
+(defn- get-slot-value
   "Returns current slot value if its already set. Otherwise, if there is only one possible value, return that. Otherwise, 0."
+  [puzzle col row]
   (let [slot-value (puzzle (puzzle-index col row))]
     (cond (< 0 slot-value) slot-value
           :else (let [poss-values (possible-values puzzle col row)]
@@ -125,8 +127,9 @@
                  subgrid-col (range 0 3)]
              [subgrid-col subgrid-row])))
 
-(defn puzzle-complete? [puzzle]
+(defn puzzle-complete?
   "Checks that all columns, rows, and subgrids have the legal sudoku values."
+  [puzzle]
   (let [sudoku-values (range 1 10)]
     (and (every? (fn [col] (= sudoku-values
                              (sort (puzzle-column puzzle col))))
