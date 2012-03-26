@@ -1,6 +1,5 @@
 (ns sudoku-clojure.core
-  (:require [clojure.string :as str])
-  (:require [clojure.set :as set]))
+  (:require [clojure.string :as str]))
 
 (defn working-dir-path [path]
   (str (. System getProperty "user.dir") path ))
@@ -63,12 +62,12 @@
   "Get all the possible sudoku moves for a col and row index on a puzzle."
   [puzzle col row]
   {:pre (= 0 (puzzle (puzzle-index col row)))}
-  (apply set/difference
-         (map set [(range 1 10)
-                   (puzzle-column puzzle col)
-                   (puzzle-row puzzle row)
-                   (puzzle-subgrid puzzle
-                                   (subgrid-coords col row))])))
+  (apply disj
+         (set (range 1 10))
+         (concat (puzzle-column puzzle col)
+                 (puzzle-row puzzle row)
+                 (puzzle-subgrid puzzle
+                                 (subgrid-coords col row)))))
 
 (defn potentially-solvable? [puzzle]
   "No empty slots that have no possible values?"
