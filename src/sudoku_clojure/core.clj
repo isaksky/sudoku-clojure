@@ -168,7 +168,9 @@
        (> i 8) (explode  "Should never happen. Puzzle must have been screwed up somewhere.")
        :else (recur (inc i))))))
 
-(defn guess-solve [puzzle fallback-solver]
+(declare solve)
+
+(defn guess-solve [puzzle]
   {:pre [(not (puzzle-filled? puzzle))
          (potentially-solvable? puzzle)]
    :post [(potentially-solvable? puzzle)]}
@@ -179,7 +181,7 @@
         (cond (puzzle-filled? guessed-puzzle)
               guessed-puzzle
               (potentially-solvable? guessed-puzzle)
-              (or (fallback-solver guessed-puzzle)
+              (or (solve guessed-puzzle)
                   (if (seq remain-guesses)
                     (recur (first remain-guesses) (rest remain-guesses)))))))))
 
@@ -192,7 +194,7 @@
         (potentially-solvable? puzzle)
         (let [puzzle-obv (fill-obvious puzzle)]
           (cond (puzzle-filled? puzzle-obv) puzzle-obv
-                (potentially-solvable? puzzle-obv) (guess-solve puzzle-obv solve)))))
+                (potentially-solvable? puzzle-obv) (guess-solve puzzle-obv)))))
 
 (defn solve-print [puzzle]
   (let [solve-attempt (solve puzzle)]
