@@ -5,16 +5,16 @@
   (str (. System getProperty "user.dir") path ))
 
 (def sudoku-puzzles
-  "A vector with all the puzzles read from disk."
-  (let [sudoku-puzzles-file (working-dir-path "/resources/sudoku.txt")
-        file-contents (slurp sudoku-puzzles-file)
-        puzzle-strings (map str/join
-                            (map str/split-lines
-                                 (filter #(not (str/blank? %))
-                                         (str/split file-contents #"Grid \d+")))) ]
-    (into [] (for [ps puzzle-strings]
-               (into [] (for [char (map str (.toCharArray ps))]
-                          (Integer. char)))))))
+  "A vector with all the puzzles read from disk. See tests for example puzzles."
+  (->> (working-dir-path "/resources/sudoku.txt")
+       slurp
+       (#(str/split % #"Grid \d+"))
+       (remove str/blank?)
+       (map #(str/replace % #"\r?\n" ""))
+       (map (fn [puzzle-string]
+              (into [] (for [char (map str (.toCharArray puzzle-string))]
+                         (Integer. char)))))
+       (into [])))
 
 (def all-puzzle-coords
   (for [row (range 0 9)
